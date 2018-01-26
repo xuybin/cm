@@ -67,12 +67,39 @@ mysql> show variables like "character%";
 | character_sets_dir       | /usr/share/mysql/charsets/ |
 +--------------------------+----------------------------+
 
-create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-mysql>create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-mysql>create database amon DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+mysql> create database hive DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
+mysql> create database amon DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
+mysql> exit
 
 /opt/cm-5.13.1/share/cmf/schema/scm_prepare_database.sh mysql scm数据库 scm数据库用户名 scm密码 -u具有创建权限的mysql用户名 -p具有创建权限的mysql用户密码
 
+mysql -uroot -p
+mysql> SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
++------------------------------------+
+| query                              |
++------------------------------------+
+| User: 'mysql.session'@'localhost'; |
+| User: 'mysql.sys'@'localhost';     |
+| User: 'root'@'localhost';          |
+| User: 'scm'@'localhost';           |
++------------------------------------+
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| amon               |
+| hive               |
+| mysql              |
+| performance_schema |
+| scm                |
+| sys                |
++--------------------+
+
+mysql> exit
 
 ```
 
@@ -81,12 +108,14 @@ mysql>create database amon DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 ```
 systemctl start cloudera-scm-server
 systemctl status cloudera-scm-server
-tail -f cloudera-scm-server.log
+systemctl enable cloudera-scm-server
+tail -f /opt/cm-5.13.1/log/cloudera-scm-server/cloudera-scm-server.log
 ```
 ### 所有节点启动cloudera-scm-agent及查看日志
 ```
 systemctl start cloudera-scm-agent
 systemctl status cloudera-scm-agent
+systemctl enable cloudera-scm-agent
 tail -f /opt/cm-5.13.1/log/cloudera-scm-agent/cloudera-scm-agent.log
 ```
 # 5 使用admin:admin登陆http://主节点:7180/
@@ -103,7 +132,7 @@ rpm -qa |grep oracle-j2sdk |xargs yum remove -y
 rpm -qa |grep mysql |xargs yum remove -y && rm -rf /etc/mysql /var/lib/mysql /var/cache/yum/x86_64/7/mysql* /var/lib/yum/repos/x86_64/7/mysql* /var/log/mysqld.log
 ps -ef |grep /opt/cm-5.13.1/
 kill -9 ***
-rm -rf /etc/yum.repos.d/cloudera* && yum clean all && rm -rf /var/cache/yum/yum/x86_64/7/cloudera* /var/lib/yum/repos/x86_64/7/cloudera*
+rm -rf /etc/init.d/cloudera-* /etc/default/cloudera-* /etc/yum.repos.d/cloudera* && yum clean all && rm -rf /var/cache/yum/yum/x86_64/7/cloudera* /var/lib/yum/repos/x86_64/7/cloudera*
 rm -rf /opt/cm-* /usr/share/cmf /var/lib/cloudera* /var/cache/yum/x86_64/6/cloudera* /var/log/cloudera* /var/run/cloudera* /etc/cloudera* /opt/cloudera*  /tmp/* /var/cache/yum/x86_64/7/cloudera-*
 find / -path *cloudera*
 find / -path *cm-5.13.1*

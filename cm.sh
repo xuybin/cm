@@ -114,8 +114,9 @@ character_set_server=utf8\n\
 
 etc_profile="sed -i '/^# \/etc\/profile/ s:.*:export JAVA_HOME=/usr/java/default\nexport PATH=\$JAVA_HOME/bin\:\$PATH\nexport CLASSPATH=.\:\$JAVA_HOME/lib\:\$CLASSPATH\n:' /etc/profile "
 etc_rclocal="sed -i '/^# that this script will be executed during boot./ s:.*:echo never > \/sys\/kernel\/mm\/transparent_hugepage\/defrag\necho never > \/sys\/kernel\/mm\/transparent_hugepage\/enabled\n:' /etc/rc.local "
-etc_sysctlconf="sed -i '/^vm.swappiness/ s:.*:vm.swappiness=10:' /etc/sysctl.conf "
-
+etc_sysctlconf="sed -i '/^vm.swappiness/ s:.*:vm.swappiness=10\n:' /etc/sysctl.conf "
+cloudera_scm_server="sed -i '/^CMF_DEFAULTS=${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-server " 
+cloudera_scm_agent="sed -i '/^CMF_DEFAULTS=${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-agent " 
 mkdir -p /root/rpm && mkdir -p /root/parcel-repo
 docker run --rm  -v /root/rpm:/opt/cloudera/rpm  -v /root/parcel-repo:/opt/cloudera/parcel-repo  registry.cn-shenzhen.aliyuncs.com/xuybin/cm
 
@@ -146,9 +147,8 @@ for i in "${!nodes_ip[@]}"; do
     ssh ${nodes_ip[$i]} "\
     	tar zxf /opt/cloudera/rpm/cloudera-manager-centos7.tar.gz -C /opt/ \
     	&& rm -rf /etc/init.d/cloudera-scm-server /etc/init.d/cloudera-scm-agent \
-   		&& ln -s /opt/cm-5.13.1/etc/init.d/cloudera-scm-server /etc/init.d/ && ln -s /opt/cm-5.13.1/etc/init.d/cloudera-scm-agent /etc/init.d/ \
+   		&& ${cloudera_scm_agent} && ln -f -s /opt/cm-5.13.1/etc/init.d/cloudera-scm-agent /etc/init.d/ \
     	&& sed -i \"s/server_host=localhost/server_host=${ntp_master_hostname}/\" /opt/cm-5.13.1/etc/cloudera-scm-agent/config.ini \
-    	&& pwd && chown -R cloudera-scm:cloudera-scm /opt/cloudera /opt/cm-5.13.1 \
     	&& yum localinstall -y  /opt/cloudera/rpm/jdk8.rpm \
     "
   if [ "${nodes_ip[$i]}" == "${ntp_master}" ]; then
@@ -156,6 +156,7 @@ for i in "${!nodes_ip[@]}"; do
 			echo ''>/var/spool/cron/root && crontab -l \
       && systemctl stop crond && systemctl disable crond \
       && systemctl start ntpd &&  systemctl enable ntpd \
+      && ${cloudera_scm_server} && ln -f -s /opt/cm-5.13.1/etc/init.d/cloudera-scm-server /etc/init.d/ \
       && mkdir -p /usr/share/java /var/lib/cloudera-scm-server /opt/cloudera/parcel-repo && chown -R cloudera-scm:cloudera-scm /var/lib/cloudera-scm-server /opt/cloudera/parcel-repo \
       && mv -f /opt/cloudera/rpm/mysql-connector-java.jar /usr/share/java/ \
       && wget -q -O '/tmp/mysql-community-release-el7-5.noarch.rpm' http://repo.mysql.com/mysql57-community-release-el7-11.noarch.rpm &&yum localinstall -y /tmp/mysql-community-release-el7-5.noarch.rpm && yum -y install mysql-server \
@@ -171,7 +172,9 @@ for i in "${!nodes_ip[@]}"; do
   fi
   
   ssh ${nodes_ip[$i]} "\
-    rm -rf /opt/cloudera/rpm/cloudera-manager-centos7.tar.gz  /opt/cloudera/rpm/jdk8.rpm \ 
+  	systemctl daemon-reload \
+  	&& chown -R cloudera-scm:cloudera-scm /opt/cloudera /opt/cm-5.13.1 \
+    && rm -rf /opt/cloudera/rpm/cloudera-manager-centos7.tar.gz  /opt/cloudera/rpm/jdk8.rpm \ 
   "
 done
 rm -r -f /root/rpm  /root/parcel-repo
