@@ -131,8 +131,14 @@ rpm -qa |grep oracle-j2sdk |xargs yum remove -y
 rpm -qa |grep mysql |xargs yum remove -y && rm -rf /etc/mysql /var/lib/mysql /var/cache/yum/x86_64/7/mysql* /var/lib/yum/repos/x86_64/7/mysql* /var/log/mysqld.log
 ps -ef |grep /opt/cm-5.13.1/
 kill -9 ***
-rm -rf /etc/init.d/cloudera-* /etc/default/cloudera-* /etc/yum.repos.d/cloudera* && yum clean all && rm -rf /var/cache/yum/yum/x86_64/7/cloudera* /var/lib/yum/repos/x86_64/7/cloudera*
-rm -rf /opt/cm-* /usr/share/cmf /var/lib/cloudera* /var/cache/yum/x86_64/6/cloudera* /var/log/cloudera* /var/run/cloudera* /etc/cloudera* /opt/cloudera*  /tmp/* /var/cache/yum/x86_64/7/cloudera-*
+rm -rf /etc/init.d/cloudera-* /etc/default/cloudera-* /etc/yum.repos.d/cloudera* && yum clean all && rm -rf /var/cache/yum/yum/x86_64/7/cloudera* /var/lib/yum/repos/x86_64/7/cloudera* /var/cache/yum/x86_64/7/cloudera-*
+rm -rf /opt/cm-* /usr/share/cmf /var/lib/cloudera* /var/cache/yum/x86_64/6/cloudera* /var/log/cloudera* /var/run/cloudera* /etc/cloudera* /opt/cloudera*  /etc/rc.d/rc0.d/K10cloudera-* /etc/rc.d/init.d/cloudera* /tmp/*  
+cd /etc/rc.d/rc1.d/ && rm -rf K10cloudera-scm-agent K10cloudera-scm-server
+cd /etc/rc.d/rc2.d/ && rm -rf K10cloudera-scm-agent K10cloudera-scm-server
+cd /etc/rc.d/rc3.d/ && rm -rf K10cloudera-scm-agent K10cloudera-scm-server
+cd /etc/rc.d/rc4.d/ && rm -rf K10cloudera-scm-agent K10cloudera-scm-server
+cd /etc/rc.d/rc5.d/ && rm -rf K10cloudera-scm-agent K10cloudera-scm-server
+cd /etc/rc.d/rc6.d/ && rm -rf K10cloudera-scm-agent K10cloudera-scm-server
 find / -path *cloudera*
 find / -path *cm-5.13.1*
 ```

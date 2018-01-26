@@ -5,6 +5,9 @@ ntp_master_hostname='ntp-master'
 nodes_ip=(
 '172.16.105.230'
 '172.16.105.231'
+'172.16.105.232'
+'172.16.105.233'
+'172.16.105.234'
 )
 nodes_hostname=(
 'ntp-master'
