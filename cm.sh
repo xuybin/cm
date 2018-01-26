@@ -165,7 +165,7 @@ for i in "${!nodes_ip[@]}"; do
     scp /root/parcel-repo/* ${nodes_ip[$i]}:/opt/cloudera/parcel-repo/
   else
     ssh ${nodes_ip[$i]} "\
-			echo -e '0-59/10 * * * * /usr/sbin/ntpdate ntp-server\n' >/var/spool/cron/root && crontab -l  \
+			echo -e '0-59/10 * * * * /usr/sbin/ntpdate ntp-master\n' >/var/spool/cron/root && crontab -l  \
       && systemctl start crond && systemctl enable crond \
       && systemctl stop ntpd &&  systemctl disable ntpd \
     "
