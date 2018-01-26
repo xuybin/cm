@@ -173,6 +173,7 @@ for i in "${!nodes_ip[@]}"; do
   
   ssh ${nodes_ip[$i]} "\
   	systemctl daemon-reload \
+  	&& rename sha1 sha /opt/cloudera/parcel-repo/* \
   	&& chown -R cloudera-scm:cloudera-scm /opt/cloudera /opt/cm-5.13.1 \
     && rm -rf /opt/cloudera/rpm/cloudera-manager-centos7.tar.gz  /opt/cloudera/rpm/jdk8.rpm \ 
   "

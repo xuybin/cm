@@ -106,14 +106,14 @@ mysql> exit
 # 4 启动
 ### 主节点启动cloudera-scm-server及查看日志
 ```
-systemctl start cloudera-scm-server
+systemctl restart cloudera-scm-server
 systemctl status cloudera-scm-server
 systemctl enable cloudera-scm-server
 tail -f /opt/cm-5.13.1/log/cloudera-scm-server/cloudera-scm-server.log
 ```
 ### 所有节点启动cloudera-scm-agent及查看日志
 ```
-systemctl start cloudera-scm-agent
+systemctl restart cloudera-scm-agent
 systemctl status cloudera-scm-agent
 systemctl enable cloudera-scm-agent
 tail -f /opt/cm-5.13.1/log/cloudera-scm-agent/cloudera-scm-agent.log
