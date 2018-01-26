@@ -121,8 +121,8 @@ character_set_server=utf8\n\
 etc_profile="sed -i '/^# \/etc\/profile/ s:.*:export JAVA_HOME=/usr/java/default\nexport PATH=\$JAVA_HOME/bin\:\$PATH\nexport CLASSPATH=.\:\$JAVA_HOME/lib\:\$CLASSPATH\n:' /etc/profile "
 etc_rclocal="sed -i '/^# that this script will be executed during boot./ s:.*:echo never > \/sys\/kernel\/mm\/transparent_hugepage\/defrag\necho never > \/sys\/kernel\/mm\/transparent_hugepage\/enabled\n:' /etc/rc.local "
 etc_sysctlconf="sed -i '/^# For more information/ s:.*:vm.swappiness=10\n:' /etc/sysctl.conf "
-cloudera_scm_server="sed -i '/^CMF_DEFAULTS=${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-server " 
-cloudera_scm_agent="sed -i '/^CMF_DEFAULTS=${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-agent " 
+cloudera_scm_server="sed -i '/^CMF_DEFAULTS=\${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-server " 
+cloudera_scm_agent="sed -i '/^CMF_DEFAULTS=\${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-agent " 
 mkdir -p /root/rpm && mkdir -p /root/parcel-repo
 docker run --rm  -v /root/rpm:/opt/cloudera/rpm  -v /root/parcel-repo:/opt/cloudera/parcel-repo  registry.cn-shenzhen.aliyuncs.com/xuybin/cm
 
