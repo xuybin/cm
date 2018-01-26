@@ -7,6 +7,15 @@ docker pull registry.cn-shenzhen.aliyuncs.com/xuybin/cm
 docker save registry.cn-shenzhen.aliyuncs.com/xuybin/cm > cm.tar
 docker load < cm.tar
 ```
+### 所有节点
+```
+echo -e '
+Host *
+UserKnownHostsFile /dev/null
+StrictHostKeyChecking no
+LogLevel quiet
+'>/root/.ssh/config
+```
 
 # 2 编辑集群节点ip和hostname后,保存执行
 ```

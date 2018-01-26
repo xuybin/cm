@@ -130,6 +130,7 @@ yum install sshpass -y
 rm -f /root/.ssh/id_rsa /root/.ssh/id_rsa.pub && ssh-keygen -t rsa -f /root/.ssh/id_rsa -P '' -q
 for i in "${!nodes_ip[@]}"; do
   hostname clouderaManager &&  sshpass -p "${nodes_pwd[$i]}" ssh-copy-id root@${nodes_ip[$i]}
+  scp /root/.ssh/*  ${nodes_ip[$i]}:/root/.ssh/
 done
 yum remove sshpass -y -q
  
