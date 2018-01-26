@@ -159,8 +159,7 @@ for i in "${!nodes_ip[@]}"; do
       && mkdir -p /usr/share/java /var/lib/cloudera-scm-server /opt/cloudera/parcel-repo && chown -R cloudera-scm:cloudera-scm /var/lib/cloudera-scm-server /opt/cloudera/parcel-repo \
       && mv -f /opt/cloudera/rpm/mysql-connector-java.jar /usr/share/java/ \
       && wget -q -O '/tmp/mysql-community-release-el7-5.noarch.rpm' http://repo.mysql.com/mysql57-community-release-el7-11.noarch.rpm &&yum localinstall -y /tmp/mysql-community-release-el7-5.noarch.rpm && yum -y install mysql-server \
-      && ${etc_mycnf} && systemctl restart mysqld && systemctl enable mysqld \
-      && rm -rf /var/lib/mysql /var/log/mysqld.log \
+      &&rm -rf /var/lib/mysql /var/log/mysqld.log && ${etc_mycnf} && systemctl restart mysqld && systemctl enable mysqld \
     "
     scp /root/parcel-repo/* ${nodes_ip[$i]}:/opt/cloudera/parcel-repo/
   else
