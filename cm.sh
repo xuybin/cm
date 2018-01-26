@@ -130,7 +130,7 @@ yum remove sshpass -y -q
 for i in "${!nodes_ip[@]}"; do
   printf "##########################################################\n%s\t INSTALL ENV TO %s\t%s\n" "$i" "${nodes_ip[$i]}" "${nodes_hostname[$i]}"
   ssh ${nodes_ip[$i]} "\
-  		rm -rf /etc/yum.repos.d/cloudera* /opt/cloudera/rpm/*   /opt/cm-* /opt/cloudera/parcel-repo/*  /var/lib/cloudera-scm-server/* \
+  		rm -rf /etc/yum.repos.d/cloudera* /opt/cloudera/*   /opt/cm-*  /var/lib/cloudera-scm-server/* \
       && systemctl stop firewalld && systemctl disable firewalld  \
       && yum -y install ntpdate ntp crontabs && ${etc_ntp_conf} && ${etc_sysconfig_ntpdate} && ntpdate -u ntp1.aliyun.com \
       && yum remove java-1.7.0-openjdk* -y && yum remove java-1.8.0-openjdk* -y && ${etc_profile} && source /etc/profile \
