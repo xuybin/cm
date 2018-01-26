@@ -12,6 +12,9 @@ nodes_ip=(
 nodes_hostname=(
 'ntp-master'
 'node1'
+'node2'
+'node3'
+'node4'
 )
 
 etc_hosts="echo -e '
