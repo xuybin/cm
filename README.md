@@ -123,9 +123,8 @@ tail -f /opt/cm-5.13.1/log/cloudera-scm-agent/cloudera-scm-agent.log
 
 # 6 安装失败或重装清理
 ```
-/opt/cm-5.13.1/etc/init.d/cloudera-scm-server stop
-/opt/cm-5.13.1/etc/init.d/cloudera-scm-agent stop
-/opt/cm-5.13.1/share/cmf/uninstall-cloudera-manager.sh
+systemctl stop cloudera-scm-agent &&  systemctl disable cloudera-scm-agent && systemctl stop cloudera-scm-server &&  systemctl disable cloudera-scm-server
+
 rpm -qa |grep cloudera |xargs yum remove -y
 rpm -qa |grep postgresql |xargs yum remove -y 
 rpm -qa |grep oracle-j2sdk |xargs yum remove -y
