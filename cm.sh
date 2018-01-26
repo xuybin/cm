@@ -114,7 +114,7 @@ character_set_server=utf8\n\
 
 etc_profile="sed -i '/^# \/etc\/profile/ s:.*:export JAVA_HOME=/usr/java/default\nexport PATH=\$JAVA_HOME/bin\:\$PATH\nexport CLASSPATH=.\:\$JAVA_HOME/lib\:\$CLASSPATH\n:' /etc/profile "
 etc_rclocal="sed -i '/^# that this script will be executed during boot./ s:.*:echo never > \/sys\/kernel\/mm\/transparent_hugepage\/defrag\necho never > \/sys\/kernel\/mm\/transparent_hugepage\/enabled\n:' /etc/rc.local "
-etc_sysctlconf="sed -i '/^vm.swappiness/ s:.*:vm.swappiness=10\n:' /etc/sysctl.conf "
+etc_sysctlconf="sed -i '/^# For more information/ s:.*:vm.swappiness=10\n:' /etc/sysctl.conf "
 cloudera_scm_server="sed -i '/^CMF_DEFAULTS=${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-server " 
 cloudera_scm_agent="sed -i '/^CMF_DEFAULTS=${CMF_DEFAULTS/ s:.*:CMF_DEFAULTS=/opt/cm-5.13.1/etc/default\n:' /opt/cm-5.13.1/etc/init.d/cloudera-scm-agent " 
 mkdir -p /root/rpm && mkdir -p /root/parcel-repo
@@ -137,7 +137,7 @@ for i in "${!nodes_ip[@]}"; do
       && sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config \
       && sed -i 's/GRUB_CMDLINE_LINUX=\"rd/GRUB_CMDLINE_LINUX=\"ipv6.disable=1 rd/' /etc/default/grub && grub2-mkconfig -o /boot/grub2/grub.cfg \
       && ${etc_hosts} && hostname ${nodes_hostname[$i]} && ${etc_sysconfig_network} && sed -i \"s/#HOSTNAME=/HOSTNAME=${nodes_hostname[$i]}/\" /etc/sysconfig/network \
-      && ${etc_rclocal} && chmod +x /etc/rc.d/rc.local \
+      && ${etc_rclocal} && chmod +x /etc/rc.d/rc.local  && echo never > /sys/kernel/mm/transparent_hugepage/defrag && echo never > /sys/kernel/mm/transparent_hugepage/enabled \
       && ${etc_sysctlconf} && sysctl -p \
       && mkdir -p /opt/cloudera/rpm  /var/spool/cron\
     "
